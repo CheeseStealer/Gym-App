@@ -1,7 +1,6 @@
 from error import Error
 from time import *
 
-while True:
-    error1 = Error("integer")
-    print(error1.win_stat())
-    sleep(1000)
+error1 = Error("integer")
+error1.er_popup()
+print(error1.win_stat())
