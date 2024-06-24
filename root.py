@@ -5,9 +5,9 @@ class Main:
     def __init__(self, page, account_name):
         self.UI = page
         self.ac_name = account_name
-        self.win_bac = "white" # note to self, make dictionaries of all of the UI properties
-        self.hdr_bg = "sky blue"
-        self.t_fg = "white"
+        self.win_bac = "#324450" # note to self, make dictionaries of all of the UI properties
+        self.hdr_bg = "#469FD3"
+        self.t_fg = "black"
         self.error_state = False
         
         self.window_status = False
@@ -25,19 +25,51 @@ class Main:
         root.columnconfigure((0,6), weight = 1)
         root.columnconfigure((1,2,4,5), weight = 2)
         root.columnconfigure(3, weight = 8)
-        root.rowconfigure((0,2,3,5), weight = 1)
-        root.rowconfigure(1, weight = 2)
-        root.rowconfigure(4, weight = 24)
+        root.rowconfigure((0,2), weight = 0)
+        root.rowconfigure((3,5,7), weight = 1)
+        root.rowconfigure((1,7), weight = 1)
+        root.rowconfigure(4, weight = 3)
+        root.rowconfigure(6, weight = 24)
 
-        header = tk.Label(root, bg = "sky blue").grid(column = 0, row = 0, columnspan = 7, rowspan = 3, sticky = "NESW")
+        #Header frame
+        header = tk.Frame(root, bg = self.hdr_bg)
+        header.grid(column = 0, row = 0, columnspan = 7, rowspan = 3, sticky = "NESW")
+
+        header.columnconfigure((0,1,3,4), weight = 1)
+        header.columnconfigure(2, weight = 10)
+        header.rowconfigure((0,1,2), weight = 1)
         
-        app_img = tk.PhotoImage(file = 'app.png').subsample(15,15)
-        acc_img = tk.PhotoImage(file = 'acc.png').subsample(10,10)
-        app_ico = tk.Label(root, image = app_img, bg = self.hdr_bg).grid(column = 1, row = 1, sticky = "NESW")
-        acc_ico = tk.Label(root, image = acc_img, bg = self.hdr_bg).grid(column = 5, row = 1, sticky = "NESW")
-        t_app = tk.Label(root, text = "Sigma Fitness", font = ("bold", 20), fg = self.t_fg, bg = self.hdr_bg).grid(column = 2, row = 1, sticky = "NSW")
-        t_acc = tk.Label(root, text = self.ac_name, font = ("bold", 20), fg = self.t_fg, bg = self.hdr_bg).grid(column = 4, row = 1, sticky = "NES")
-        main_frame = tk.Frame(root).grid(column = 1, row = 4, columnspan = 5, sticky = "NESW")
+        app_img = tk.PhotoImage(file = 'app.png').subsample(20,20)
+        acc_img = tk.PhotoImage(file = 'acc.png').subsample(13,13)
+        app_ico = tk.Label(header, image = app_img, bg = self.hdr_bg).grid(column = 0, row = 1, sticky = "NES")
+        t_app = tk.Label(header, text = "Sigma Fitness", font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg).grid(column = 1, row = 1, sticky = "NSW")
+        acc_btn = tk.Button(header, text = self.ac_name, font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg, image = acc_img, compound = "right").grid(column = 3, row = 1, columnspan = 2, sticky = "NESW")
+        
+        #Daily Buttons
+        btn_frame = tk.Frame(root)
+        btn_frame.grid(column = 1, row = 4, columnspan = 5, sticky = "NESW")
+        btn_frame.columnconfigure((0,2,4,6,8,10,12,14), weight = 1)
+        btn_frame.columnconfigure((1,3,5,7,9,11,13), weight = 6)
+        btn_frame.rowconfigure((0,1,2), weight = 1)
+
+        #Add for loop to improve readability and efficiency
+        mon_btn = tk.Button(btn_frame).grid(column = 1, row = 1, sticky = "NESW")
+        tue_btn = tk.Button(btn_frame).grid(column = 3, row = 1, sticky = "NESW")
+        wed_btn = tk.Button(btn_frame).grid(column = 5, row = 1, sticky = "NESW")
+        thr_btn = tk.Button(btn_frame).grid(column = 7, row = 1, sticky = "NESW")
+        fri_btn = tk.Button(btn_frame).grid(column = 9, row = 1, sticky = "NESW")
+        sat_btn = tk.Button(btn_frame).grid(column = 11, row = 1, sticky = "NESW")
+        sun_btn = tk.Button(btn_frame).grid(column = 13, row = 1, sticky = "NESW")
+        
+        main_frame = tk.Frame(root)
+        main_frame.grid(column = 1, row = 6, columnspan = 5, sticky = "NESW")
+        main_frame.columnconfigure((0,2,4), weight = 1)
+        main_frame.columnconfigure(1, weight = 34)
+        main_frame.columnconfigure(3, weight = 20)
+        main_frame.rowconfigure((0,2), weight = 1)
+        main_frame.rowconfigure(1, weight = 24)
+        daily_frame = tk.Frame(main_frame, bg = "red").grid(column = 1, row = 1, sticky = "NESW")
+        total_frame = tk.Frame(main_frame, bg = "blue").grid(column = 3, row = 1, sticky = "NESW")
         #if self.error_state == True:
             #open error
         
