@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+WEEK_DAYS = ["Monday", "Tuesday", "wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
 class Main:
     def __init__(self, page, account_name):
         self.UI = page
@@ -43,7 +45,7 @@ class Main:
         acc_img = tk.PhotoImage(file = 'acc.png').subsample(13,13)
         app_ico = tk.Label(header, image = app_img, bg = self.hdr_bg).grid(column = 0, row = 1, sticky = "NES")
         t_app = tk.Label(header, text = "Sigma Fitness", font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg).grid(column = 1, row = 1, sticky = "NSW")
-        acc_btn = tk.Button(header, text = self.ac_name, font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg, image = acc_img, compound = "right").grid(column = 3, row = 1, columnspan = 2, sticky = "NESW")
+        acc_btn = tk.Button(header, text = self.ac_name, font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg, image = acc_img, compound = "right", borderwidth = 0).grid(column = 3, row = 1, columnspan = 2, sticky = "NESW")
         
         #Daily Buttons
         btn_frame = tk.Frame(root)
@@ -52,14 +54,10 @@ class Main:
         btn_frame.columnconfigure((1,3,5,7,9,11,13), weight = 6)
         btn_frame.rowconfigure((0,1,2), weight = 1)
 
-        #Add for loop to improve readability and efficiency
-        mon_btn = tk.Button(btn_frame).grid(column = 1, row = 1, sticky = "NESW")
-        tue_btn = tk.Button(btn_frame).grid(column = 3, row = 1, sticky = "NESW")
-        wed_btn = tk.Button(btn_frame).grid(column = 5, row = 1, sticky = "NESW")
-        thr_btn = tk.Button(btn_frame).grid(column = 7, row = 1, sticky = "NESW")
-        fri_btn = tk.Button(btn_frame).grid(column = 9, row = 1, sticky = "NESW")
-        sat_btn = tk.Button(btn_frame).grid(column = 11, row = 1, sticky = "NESW")
-        sun_btn = tk.Button(btn_frame).grid(column = 13, row = 1, sticky = "NESW")
+        day_btns = {}
+        for i in range(len(WEEK_DAYS)):
+            day_btns[WEEK_DAYS[i]] = f"{WEEK_DAYS[i]}_btn"
+            day_btns[WEEK_DAYS[i]] = tk.Button(btn_frame, text = WEEK_DAYS[i], relief = "solid", borderwidth = 1, bg = "green").grid(column = ((i * 2) + 1), row = 1, sticky = "NESW")
         
         main_frame = tk.Frame(root)
         main_frame.grid(column = 1, row = 6, columnspan = 5, sticky = "NESW")
