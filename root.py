@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from error import Error
 
 WEEK_DAYS = ["Monday", "Tuesday", "wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -33,6 +34,10 @@ class Main:
         root.rowconfigure(4, weight = 3)
         root.rowconfigure(6, weight = 24)
 
+        def btn_placeholder():
+            error1 = Error("integer")
+            error1.er_popup()
+
         #Header frame
         header = tk.Frame(root, bg = self.hdr_bg)
         header.grid(column = 0, row = 0, columnspan = 7, rowspan = 3, sticky = "NESW")
@@ -45,7 +50,7 @@ class Main:
         acc_img = tk.PhotoImage(file = 'acc.png').subsample(13,13)
         app_ico = tk.Label(header, image = app_img, bg = self.hdr_bg).grid(column = 0, row = 1, sticky = "NES")
         t_app = tk.Label(header, text = "Sigma Fitness", font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg).grid(column = 1, row = 1, sticky = "NSW")
-        acc_btn = tk.Button(header, text = self.ac_name, font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg, image = acc_img, compound = "right", borderwidth = 0).grid(column = 3, row = 1, columnspan = 2, sticky = "NESW")
+        acc_btn = tk.Button(header, text = self.ac_name, font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg, image = acc_img, compound = "right", borderwidth = 0, command = btn_placeholder).grid(column = 3, row = 1, columnspan = 2, sticky = "NESW")
         
         #Daily Buttons
         btn_frame = tk.Frame(root)
@@ -57,7 +62,7 @@ class Main:
         day_btns = {}
         for i in range(len(WEEK_DAYS)):
             day_btns[WEEK_DAYS[i]] = f"{WEEK_DAYS[i]}_btn"
-            day_btns[WEEK_DAYS[i]] = tk.Button(btn_frame, text = WEEK_DAYS[i], relief = "solid", borderwidth = 1, bg = "green").grid(column = ((i * 2) + 1), row = 1, sticky = "NESW")
+            day_btns[WEEK_DAYS[i]] = tk.Button(btn_frame, text = WEEK_DAYS[i], relief = "solid", borderwidth = 1, bg = "green", width = 1, command = btn_placeholder).grid(column = ((i * 2) + 1), row = 1, sticky = "NESW")
         
         main_frame = tk.Frame(root)
         main_frame.grid(column = 1, row = 6, columnspan = 5, sticky = "NESW")
@@ -73,9 +78,9 @@ class Main:
         
         #open error window function
         root.mainloop()
-         
+
     def main_win_stat(self):
-            return self.window_status
+        return self.window_status
     
     def error_state_check(self, state):
         self.error_state = state
