@@ -46,7 +46,7 @@ class Main:
         def btn_placeholder():
             #error1 = Error("integer")
             #error1.er_popup()
-            self.sign_in()
+            self.sign()
 
         #Header frame
         self.header = tk.Frame(self.root, bg = self.hdr_bg)
@@ -90,14 +90,19 @@ class Main:
         #open error window function
         self.root.mainloop()
 
-    def sign_in (self):
+    def sign (self):
         self.window_status = True
         
         #self.root.configure(bg=self.win_bac)
+        
+        #could make function for clearing window in future, would have to add to main_window call
+        self.main_frame.destroy()
+        self.btn_frame.destroy()
+        self.acc_btn.destroy()
 
         self.root.columnconfigure((3,4,5,6), weight = 0)
         self.root.columnconfigure((0,2), weight = 8)
-        self.root.columnconfigure(1, weight = 16)
+        self.root.columnconfigure(1, weight = 6)
         self.root.rowconfigure((6,7), weight = 0)
         self.root.rowconfigure((0,2), weight = 1)
         self.root.rowconfigure((1,3,5), weight = 2)
@@ -108,16 +113,36 @@ class Main:
         self.log = tk.Frame(self.root)
         self.log.grid(column = 1, row = 4, sticky = "NESW")
 
-        self.log.columnconfigure((0,4), weight = 1)
+        self.log.columnconfigure((0,4), weight = 3)
         self.log.columnconfigure((1,3), weight = 2)
-        self.log.columnconfigure(3, weight = 20)
-        self.log.rowconfigure((0,2,3,5,6,8,10), weight = 1)
-        self.log.rowconfigure((1,4,7,9), weight = 3)
+        self.log.columnconfigure(2, weight = 18)
+        self.log.rowconfigure((0,2,3,5,6,9,10), weight = 1)
+        self.log.rowconfigure((1,4,7), weight = 3)
+        self.log.rowconfigure(8, weight = 8)
 
-        #could make function for clearing window in future
-        self.main_frame.destroy()
-        self.btn_frame.destroy()
-        self.acc_btn.destroy()
+        self.acc_logo = tk.Frame(self.log)
+        self.acc_logo.grid(column = 1, row = 1, columnspan = 3, sticky = "NESW")
+        self.acc_logo.columnconfigure(1, weight = 1)
+        self.acc_logo.columnconfigure((0,2), weight = 2)
+        
+        self.acc_ico = tk.Label(self.acc_logo, image = self.acc_img).grid(column = 0, row = 0, sticky = "NES")
+        #make the sign in text variable for sign in screen and log out screen
+        self.acc_title = tk.Label(self.acc_logo, text = "Sign in", font = ("bold", 15), width = 1).grid(column = 1, row = 0, sticky = "NESW")
+
+        self.options = tk.Frame(self.log)
+        self.options.grid(column = 1, row = 9, columnspan = 3, sticky = "NESW")
+        self.options.columnconfigure((0,2), weight = 2)
+        self.options.columnconfigure((1), weight = 1)
+        self.options.rowconfigure(0, weight = 1)
+
+        self.sign_in = tk.Button(self.options, text = "Sign In", bg = "white", height = 1, width = 1).grid(column = 2, row = 0, sticky = "NESW")
+        self.sign_up = tk.Button(self.options, text = "Sign Up", bg = "white", height = 1, width = 1).grid(column = 0, row = 0, sticky = "NESW")
+
+        self.t_user = tk.Label(self.log, text = "Username:", font = 10, height = 1).grid(column = 2, row = 3, sticky = "NSW")
+        self.e_user = tk.Entry(self.log, bg = "white", font = 10, border = 1).grid(column = 2, row = 4, sticky = "NEW")
+        self.t_pass = tk.Label(self.log, text = "Password:", font = 10, height = 1).grid(column = 2, row = 6, sticky = "NSW")
+        self.e_pass = tk.Entry(self.log, bg = "white", font = 10, border = 1).grid(column = 2, row = 7, sticky = "NEW")
+        self.t_error = tk.Label(self.log, text = "Error test display", fg = "red", height = 4).grid(column = 2, row = 8, sticky = "NEW")
 
         #self.root.mainloop()
 
