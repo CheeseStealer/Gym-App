@@ -122,14 +122,28 @@ class Main:
 
         self.t_intake = tk.Label(self.daily_frame, text = "Intake:", font = 10, width = 5, anchor = "w")
         self.t_intake.grid(column = 1, row = 0, sticky = "NESW")
+        self.t_intake = tk.Label(self.daily_frame, text = "Exertion:", font = 10, width = 5, anchor = "w")
+        self.t_intake.grid(column = 3, row = 0, sticky = "NESW")
         self.intake_frame = tk.Frame(self.daily_frame, borderwidth = 2)
         self.intake_frame.grid_propagate(False)
         self.intake_frame.grid(column = 1, row = 1, sticky = "NESW")
 
-        self.intake_frame.columnconfigure(0, weight = 8)
-        self.intake_frame.columnconfigure(1, weight = 2)
-        self.intake_frame.rowconfigure((0,1,2,4,5,6,8,9,10,12,13,14), weight = 1)
-        self.intake_frame.rowconfigure((3,7,11), weight = 2)
+        self.totals_frame = tk.Frame(self.main_frame, borderwidth = 4, relief = "groove")
+        self.totals_frame.grid_propagate(False)
+        self.totals_frame.grid(column = 3, row = 1, sticky = "NESW")
+
+        self.totals_frame.columnconfigure(0, weight = 1)
+        self.totals_frame.rowconfigure(0, weight = 1)
+        self.totals_frame.rowconfigure(1, weight = 19)
+
+        self.pb_frame = tk.Frame(self.totals_frame)
+        self.pb_frame.grid_propagate(False)
+        self.pb_frame.grid(column = 0, row = 1, sticky = "NESW")
+
+        self.pb_frame.columnconfigure(0, weight = 8)
+        self.pb_frame.columnconfigure(1, weight = 2)
+        self.pb_frame.rowconfigure((0,1,2,4,5,6,8,9,10,12,13,14), weight = 1)
+        self.pb_frame.rowconfigure((3,7,11), weight = 2)
 
         #for loop for placing progress bars and data for intake
         s = ttk.Style()
@@ -138,33 +152,31 @@ class Main:
         stat_attributes = {}
         for i in range(len(MACROS)):
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_pb"
-            stat_attributes[MACROS[i]] = ttk.Progressbar(self.intake_frame, orient = tk.HORIZONTAL, style="TProgressbar", maximum = self.macro_goals[MACROS[i]])
+            stat_attributes[MACROS[i]] = ttk.Progressbar(self.pb_frame, orient = tk.HORIZONTAL, style="TProgressbar", maximum = self.macro_goals[MACROS[i]])
             stat_attributes[MACROS[i]].grid(column = 0, row = ((i*4) + 1), columnspan = 2, sticky = "NESW")
 
             stat_attributes[MACROS[i]].step(self.macro_totals[MACROS[i]])
             
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_title"
-            stat_attributes[MACROS[i]] = tk.Label(self.intake_frame, text = f"{MACROS[i]}:", font = ("Arial", 10)).grid(column = 0, row = ((i*4)), sticky = "SW")
+            stat_attributes[MACROS[i]] = tk.Label(self.pb_frame, text = f"{MACROS[i]}:", font = ("Arial", 10)).grid(column = 0, row = ((i*4)), sticky = "SW")
 
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_perc"
             current_percentage = round(((self.macro_totals[MACROS[i]]/self.macro_goals[MACROS[i]])*100))
-            stat_attributes[MACROS[i]] = tk.Label(self.intake_frame, text = f"{current_percentage}%", font = ("Arial", 10)).grid(column = 1, row = ((i*4)), sticky = "ES")
+            stat_attributes[MACROS[i]] = tk.Label(self.pb_frame, text = f"{current_percentage}%", font = ("Arial", 10)).grid(column = 1, row = ((i*4)), sticky = "ES")
 
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_total"
-            stat_attributes[MACROS[i]] = tk.Label(self.intake_frame, text = f"Total: {self.macro_totals[MACROS[i]]}{UNITS[MACROS[i]]}", font = ("Arial", 10)).grid(column = 0, row = ((i*4) + 2), sticky = "NW")
+            stat_attributes[MACROS[i]] = tk.Label(self.pb_frame, text = f"Total: {self.macro_totals[MACROS[i]]}{UNITS[MACROS[i]]}", font = ("Arial", 10)).grid(column = 0, row = ((i*4) + 2), sticky = "NW")
 
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_btn"
-            stat_attributes[MACROS[i]] = tk.Button(self.intake_frame, text = "edit", font = ("Arial", 10), height = 1).grid(column = 1, row = ((i*4) + 2), sticky = "NE")
+            stat_attributes[MACROS[i]] = tk.Button(self.pb_frame, text = "edit", font = ("Arial", 10), height = 1).grid(column = 1, row = ((i*4) + 2), sticky = "NE")
 
 
-        self.t_exertion = tk.Label(self.daily_frame, text = "Exertion:", font = 10, width = 5, anchor = "w")
-        self.t_exertion.grid(column = 3, row = 0, sticky = "NESW")
-        self.exertion_frame = tk.Frame(self.daily_frame, borderwidth = 2)
+        self.t_exertion = tk.Label(self.totals_frame, text = "Totals:", font = 10, width = 5, anchor = "w")
+        self.t_exertion.grid(column = 0, row = 0, sticky = "NSW")
+        self.exertion_frame = tk.Frame(self.totals_frame, borderwidth = 2)
         self.exertion_frame.grid_propagate(False)
         self.exertion_frame.grid(column = 3, row = 1, sticky = "NESW")
 
-        self.totals_frame = tk.Frame(self.main_frame, borderwidth = 4, relief = "groove")
-        self.totals_frame.grid(column = 3, row = 1, sticky = "NESW")
         #if self.error_state == True:
             #open error
         
