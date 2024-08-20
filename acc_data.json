@@ -1,13 +1,51 @@
 {
-    "user1" : {
+    "User_0" : {
         "password" : "string",
         "week_track" : {
-            "monday" : {
+            "Monday" : {
                 "goals" : {
                     "Calories" : 8757,
                     "Protein" : 74,
                     "Carbs" : 263,
                     "Fat" : 83
+                },
+                "intake" : {
+                    "Calories" : 900,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
+                },
+                "exertion" : {
+                    "Calories" : 300,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
+                },
+                "totals" : {
+                    "Calories" : 7000,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
+                }
+            },
+            "Tuesday" : {
+                "goals" : {
+                    "Calories" : 8757,
+                    "Protein" : 74,
+                    "Carbs" : 263,
+                    "Fat" : 83
+                },
+                "intake" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
+                },
+                "exertion" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
                 },
                 "totals" : {
                     "Calories" : 0,
@@ -16,12 +54,24 @@
                     "Fat" : 0
                 }
             },
-            "tuesday" : {
+            "Wednesday" : {
                 "goals" : {
                     "Calories" : 8757,
                     "Protein" : 74,
                     "Carbs" : 263,
                     "Fat" : 83
+                },
+                "intake" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
+                },
+                "exertion" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
                 },
                 "totals" : {
                     "Calories" : 0,
@@ -30,12 +80,24 @@
                     "Fat" : 0
                 }
             },
-            "wednesday" : {
+            "Thursday" : {
                 "goals" : {
                     "Calories" : 8757,
                     "Protein" : 74,
                     "Carbs" : 263,
                     "Fat" : 83
+                },
+                "intake" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
+                },
+                "exertion" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
                 },
                 "totals" : {
                     "Calories" : 0,
@@ -44,12 +106,24 @@
                     "Fat" : 0
                 }
             },
-            "thursday" : {
+            "Friday" : {
                 "goals" : {
                     "Calories" : 8757,
                     "Protein" : 74,
                     "Carbs" : 263,
                     "Fat" : 83
+                },
+                "intake" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
+                },
+                "exertion" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
                 },
                 "totals" : {
                     "Calories" : 0,
@@ -58,12 +132,24 @@
                     "Fat" : 0
                 }
             },
-            "friday" : {
+            "Saturday" : {
                 "goals" : {
                     "Calories" : 8757,
                     "Protein" : 74,
                     "Carbs" : 263,
                     "Fat" : 83
+                },
+                "intake" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
+                },
+                "exertion" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
                 },
                 "totals" : {
                     "Calories" : 0,
@@ -72,26 +158,24 @@
                     "Fat" : 0
                 }
             },
-            "saturday" : {
+            "Sunday" : {
                 "goals" : {
                     "Calories" : 8757,
                     "Protein" : 74,
                     "Carbs" : 263,
                     "Fat" : 83
                 },
-                "totals" : {
+                "intake" : {
                     "Calories" : 0,
                     "Protein" : 0,
                     "Carbs" : 0,
                     "Fat" : 0
-                }
-            },
-            "sunday" : {
-                "goals" : {
-                    "Calories" : 8757,
-                    "Protein" : 74,
-                    "Carbs" : 263,
-                    "Fat" : 83
+                },
+                "exertion" : {
+                    "Calories" : 0,
+                    "Protein" : 0,
+                    "Carbs" : 0,
+                    "Fat" : 0
                 },
                 "totals" : {
                     "Calories" : 0,

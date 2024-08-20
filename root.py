@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from error import Error
-import random as r
+from edit_box import Edit
+import json
 
 WEEK_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 MACROS = ["Calories", "Protein", "Carbs", "Fat"]
@@ -10,12 +11,17 @@ UNITS = {"Calories" : "kj", "Protein" : "g", "Carbs" : "g", "Fat" : "g"}
 class Main:
     def __init__(self, page, account_name):
 
+        self.acc_name = account_name
+
         #setting the active day for display
         self.active_day = {"Monday" : ["active", "grey"], "Tuesday" : ["active", "grey"], "Wednesday" : ["active", "grey"], "Thursday" : ["active", "grey"], "Friday" : ["active", "grey"], "Saturday" : ["active", "grey"], "Sunday" : ["active", "grey"]}
 
-        #placeholder values, remove in final, pull values from json
+        with open("acc_data.json", "r+") as f:
+            global data
+            data = json.load(f)
+        #Initial designation of totals
         self.macro_goals = {"Calories" : 100.00, "Protein" : 100.00, "Carbs" : 100.00, "Fat" : 100.00}
-        self.macro_totals = {"Calories" : r.randint(0,100), "Protein" : r.randint(0,100), "Carbs" : r.randint(0,100), "Fat" : r.randint(0,100)}
+        self.macro_totals = {"Calories" : 0, "Protein" : 0, "Carbs" : 0, "Fat" : 0}
 
         self.UI = page
         self.error_state = False
@@ -46,6 +52,11 @@ class Main:
     def main_window(self, day, startup):
         self.window_status = True
 
+        #exertion total string
+        self.exertion_ts = tk.StringVar()
+        #intake total string
+        self.intake_ts = tk.StringVar()
+
         if startup == "Boot":
             self.day_btns = {}
             self.day_btn_set(startup, day)
@@ -57,6 +68,11 @@ class Main:
             self.header.destroy()
             self.acc_btn.destroy()
         
+        MACROS
+        for i in range(len(MACROS)):
+            self.macro_goals[MACROS[i]] = (data[self.acc_name]["week_track"][day]["goals"][MACROS[i]])
+            self.macro_totals[MACROS[i]] = (data[self.acc_name]["week_track"][day]["totals"][MACROS[i]])
+
         self.root.configure(bg=self.win_bac)
 
         self.root.columnconfigure((0,6), weight = 1)
@@ -120,13 +136,36 @@ class Main:
         self.daily_frame.rowconfigure(0, weight = 1)
         self.daily_frame.rowconfigure(2, weight = 1)
 
-        self.t_intake = tk.Label(self.daily_frame, text = "Intake:", font = 10, width = 5, anchor = "w")
-        self.t_intake.grid(column = 1, row = 0, sticky = "NESW")
-        self.t_intake = tk.Label(self.daily_frame, text = "Exertion:", font = 10, width = 5, anchor = "w")
-        self.t_intake.grid(column = 3, row = 0, sticky = "NESW")
-        self.intake_frame = tk.Frame(self.daily_frame, borderwidth = 2)
+        self.intake_t_frame = tk.Frame(self.daily_frame)
+        self.intake_t_frame.grid(column = 1, row = 0, sticky = "NESW")
+        self.intake_t_frame.columnconfigure(0, weight = 3)
+        self.intake_t_frame.columnconfigure(1, weight = 1)
+        self.intake_t_frame.rowconfigure(0, weight = 1)
+
+
+        self.exertion_t_frame = tk.Frame(self.daily_frame)
+        self.exertion_t_frame.grid(column = 3, row = 0, sticky = "NESW")
+        self.exertion_t_frame.columnconfigure(0, weight = 3)
+        self.exertion_t_frame.columnconfigure(1, weight = 1)
+        self.exertion_t_frame.rowconfigure(0, weight = 1)
+
+
+        self.t_intake = tk.Label(self.intake_t_frame, textvariable = self.intake_ts, font = 10, width = 5, anchor = "w")
+        self.t_intake.grid(column = 0, row = 0, sticky = "NESW")
+        self.t_intake = tk.Label(self.exertion_t_frame, textvariable = self.exertion_ts, font = 10, width = 5, anchor = "w")
+        self.t_intake.grid(column = 0, row = 0, sticky = "NESW")
+        self.intake_frame = tk.Frame(self.daily_frame, borderwidth = 2, bg = "red")
         self.intake_frame.grid_propagate(False)
         self.intake_frame.grid(column = 1, row = 1, sticky = "NESW")
+        self.exertion_frame = tk.Frame(self.daily_frame, borderwidth = 2, bg = "red")
+        self.intake_frame.grid_propagate(False)
+        self.intake_frame.grid(column = 1, row = 1, sticky = "NESW")
+
+        #Assigning the data from acc_data.json to a variable and setting the previous StringVars to these values (with some formatting)
+        self.intake_t = (data[self.acc_name]["week_track"][day]["intake"]["Calories"])
+        self.exertion_t = (data[self.acc_name]["week_track"][day]["exertion"]["Calories"])
+        self.intake_ts.set(f"Intake: {self.intake_t}kj")
+        self.exertion_ts.set(f"Exertion: {self.exertion_t}kj")
 
         self.totals_frame = tk.Frame(self.main_frame, borderwidth = 4, relief = "groove")
         self.totals_frame.grid_propagate(False)
@@ -146,16 +185,23 @@ class Main:
         self.pb_frame.rowconfigure((3,7,11), weight = 2)
 
         #for loop for placing progress bars and data for intake
-        s = ttk.Style()
-        s.theme_use("default")
-        s.configure("TProgressbar", thickness=3)
+        under = ttk.Style()
+        under.theme_use("default")
+        under.configure("TProgressbar", thickness=3, background = self.hdr_bg)
         stat_attributes = {}
         for i in range(len(MACROS)):
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_pb"
             stat_attributes[MACROS[i]] = ttk.Progressbar(self.pb_frame, orient = tk.HORIZONTAL, style="TProgressbar", maximum = self.macro_goals[MACROS[i]])
             stat_attributes[MACROS[i]].grid(column = 0, row = ((i*4) + 1), columnspan = 2, sticky = "NESW")
 
-            stat_attributes[MACROS[i]].step(self.macro_totals[MACROS[i]])
+            if self.macro_totals[MACROS[i]] < self.macro_goals[MACROS[i]]:
+                stat_attributes[MACROS[i]].step(self.macro_totals[MACROS[i]])
+            else:
+                stat_attributes[MACROS[i]].step(self.macro_goals[MACROS[i]])
+                over = ttk.Style()
+                over.theme_use("default")
+                over.configure("TProgressbar", thickness=3, background = "red")
+                stat_attributes[MACROS[i]].configure(style = "TProgressbar")
             
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_title"
             stat_attributes[MACROS[i]] = tk.Label(self.pb_frame, text = f"{MACROS[i]}:", font = ("Arial", 10)).grid(column = 0, row = ((i*4)), sticky = "SW")
@@ -168,7 +214,7 @@ class Main:
             stat_attributes[MACROS[i]] = tk.Label(self.pb_frame, text = f"Total: {self.macro_totals[MACROS[i]]}{UNITS[MACROS[i]]}", font = ("Arial", 10)).grid(column = 0, row = ((i*4) + 2), sticky = "NW")
 
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_btn"
-            stat_attributes[MACROS[i]] = tk.Button(self.pb_frame, text = "edit", font = ("Arial", 10), height = 1).grid(column = 1, row = ((i*4) + 2), sticky = "NE")
+            stat_attributes[MACROS[i]] = tk.Button(self.pb_frame, text = "edit", font = ("Arial", 10), height = 1, command = lambda : Edit("Calories").edit_popup()).grid(column = 1, row = ((i*4) + 2), sticky = "NE") 
 
 
         self.t_exertion = tk.Label(self.totals_frame, text = "Totals:", font = 10, width = 5, anchor = "w")
@@ -243,16 +289,30 @@ class Main:
         self.options.columnconfigure((1), weight = 1)
         self.options.rowconfigure(0, weight = 1)
 
-        self.sign_in = tk.Button(self.options, text = "Sign In", bg = "white", height = 1, width = 1, command = lambda : self.main_window("Monday", "True")).grid(column = 2, row = 0, sticky = "NESW")
-        self.sign_up = tk.Button(self.options, text = "Sign Up", bg = "white", height = 1, width = 1, command = lambda : self.main_window("Monday", "True")).grid(column = 0, row = 0, sticky = "NESW")
+        self.sign_in = tk.Button(self.options, text = "Sign In", bg = "white", height = 1, width = 1, command = self.sign_valid).grid(column = 2, row = 0, sticky = "NESW")
+        self.sign_up = tk.Button(self.options, text = "Sign Up", bg = "white", height = 1, width = 1, command = self.sign_valid).grid(column = 0, row = 0, sticky = "NESW")
+        self.root.bind("<Return>", lambda event : self.sign_valid())
 
+        self.u_nam = tk.StringVar()
+        self.u_pass = tk.StringVar()
+        self.error_txt = tk.StringVar()
         self.t_user = tk.Label(self.log, text = "Username:", font = 10, height = 1).grid(column = 2, row = 3, sticky = "NSW")
-        self.e_user = tk.Entry(self.log, bg = "white", font = 10, border = 1).grid(column = 2, row = 4, sticky = "NEW")
+        self.e_user = tk.Entry(self.log, textvariable = self.u_nam, bg = "white", font = 10, border = 1).grid(column = 2, row = 4, sticky = "NEW")
         self.t_pass = tk.Label(self.log, text = "Password:", font = 10, height = 1).grid(column = 2, row = 6, sticky = "NSW")
-        self.e_pass = tk.Entry(self.log, bg = "white", font = 10, border = 1).grid(column = 2, row = 7, sticky = "NEW")
-        self.t_error = tk.Label(self.log, text = "Error test display", fg = "red", height = 4).grid(column = 2, row = 8, sticky = "NEW")
+        self.e_pass = tk.Entry(self.log, textvariable = self.u_pass, bg = "white", font = 10, border = 1).grid(column = 2, row = 7, sticky = "NEW")
+        self.t_error = tk.Label(self.log, textvariable = self.error_txt, width = 5, font = ("Arial", 7), fg = "red", height = 4).grid(column = 2, row = 8, sticky = "NEW")
 
         #self.root.mainloop()
+    
+    def sign_valid(self):
+        try:
+            if (data[self.u_nam.get()]["password"]) == self.u_pass.get():
+                    self.root.unbind("<Return>")
+                    self.main_window("Monday", "True")
+            else:
+                self.error_txt.set("Key Error:\nplease try again,\nthe username or password you have entered is incorrect")
+        except:
+            self.error_txt.set("Key Error:\nplease try again,\nthe username or password you have entered is incorrect")
 
     def day_btn_set(self, startup, day = ""):
             for i in range(len(self.active_day)):
