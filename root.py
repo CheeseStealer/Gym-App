@@ -11,14 +11,11 @@ UNITS = {"Calories" : "kj", "Protein" : "g", "Carbs" : "g", "Fat" : "g"}
 class Main:
     def __init__(self, page, account_name):
 
-        self.acc_name = account_name
-
         #setting the active day for display
         self.active_day = {"Monday" : ["active", "grey"], "Tuesday" : ["active", "grey"], "Wednesday" : ["active", "grey"], "Thursday" : ["active", "grey"], "Friday" : ["active", "grey"], "Saturday" : ["active", "grey"], "Sunday" : ["active", "grey"]}
 
         with open("acc_data.json", "r+") as f:
-            global data
-            data = json.load(f)
+            self.data = json.load(f)
         #Initial designation of totals
         self.macro_goals = {"Calories" : 100.00, "Protein" : 100.00, "Carbs" : 100.00, "Fat" : 100.00}
         self.macro_totals = {"Calories" : 0, "Protein" : 0, "Carbs" : 0, "Fat" : 0}
@@ -36,14 +33,14 @@ class Main:
 
         if self.UI == "Main":
             self.root.title("Sigma Fitness")
-            self.ac_name = account_name
+            self.acc_name = account_name
             self.win_bac = "#324450" # note to self, make dictionaries of all of the UI properties
             self.hdr_bg = "#469FD3"
             self.t_fg = "black"
         
         elif self.UI == "Sign In":
             self.root.title("Sigma Fitness - Sign In")
-            self.ac_name = account_name
+            self.acc_name = account_name
             self.win_bac = "#324450"
             self.hdr_bg = "#469FD3"
             self.t_fg = "black"
@@ -70,8 +67,8 @@ class Main:
         
         MACROS
         for i in range(len(MACROS)):
-            self.macro_goals[MACROS[i]] = (data[self.acc_name]["week_track"][day]["goals"][MACROS[i]])
-            self.macro_totals[MACROS[i]] = (data[self.acc_name]["week_track"][day]["totals"][MACROS[i]])
+            self.macro_goals[MACROS[i]] = (self.data[self.acc_name]["week_track"][day]["values"]["goals"][MACROS[i]])
+            self.macro_totals[MACROS[i]] = (self.data[self.acc_name]["week_track"][day]["values"]["totals"][MACROS[i]])
 
         self.root.configure(bg=self.win_bac)
 
@@ -104,7 +101,7 @@ class Main:
         self.app_ico.grid(column = 0, row = 1, sticky = "NES")
         self.t_app = tk.Label(self.header, text = "Sigma Fitness", font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg)
         self.t_app.grid(column = 1, row = 1, sticky = "NSW")
-        self.acc_btn = tk.Button(self.header, text = self.ac_name, font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg, activebackground = self.hdr_bg, image = self.acc_img, compound = "right", borderwidth = 0, relief = "sunken", command = btn_sign)
+        self.acc_btn = tk.Button(self.header, text = self.acc_name, font = ("bold", 15), fg = self.t_fg, bg = self.hdr_bg, activebackground = self.hdr_bg, image = self.acc_img, compound = "right", borderwidth = 0, relief = "sunken", command = btn_sign)
         self.acc_btn.grid(column = 3, row = 1, columnspan = 2, sticky = "NESW")
         #self.acc_btn.bind("<Button-1>", lambda event : btn_placeholder, add="+")
         #self.acc_btn.bind("<Button-1>", lambda _: "break", add="+")
@@ -158,12 +155,12 @@ class Main:
         self.intake_frame.grid_propagate(False)
         self.intake_frame.grid(column = 1, row = 1, sticky = "NESW")
         self.exertion_frame = tk.Frame(self.daily_frame, borderwidth = 2, bg = "red")
-        self.intake_frame.grid_propagate(False)
-        self.intake_frame.grid(column = 1, row = 1, sticky = "NESW")
+        self.exertion_frame.grid_propagate(False)
+        self.exertion_frame.grid(column = 3, row = 1, sticky = "NESW")
 
         #Assigning the data from acc_data.json to a variable and setting the previous StringVars to these values (with some formatting)
-        self.intake_t = (data[self.acc_name]["week_track"][day]["intake"]["Calories"])
-        self.exertion_t = (data[self.acc_name]["week_track"][day]["exertion"]["Calories"])
+        self.intake_t = (self.data[self.acc_name]["week_track"][day]["values"]["intake"]["Calories"])
+        self.exertion_t = (self.data[self.acc_name]["week_track"][day]["values"]["exertion"]["Calories"])
         self.intake_ts.set(f"Intake: {self.intake_t}kj")
         self.exertion_ts.set(f"Exertion: {self.exertion_t}kj")
 
@@ -191,7 +188,7 @@ class Main:
         stat_attributes = {}
         for i in range(len(MACROS)):
             stat_attributes[MACROS[i]] = f"self.{MACROS[i]}_pb"
-            stat_attributes[MACROS[i]] = ttk.Progressbar(self.pb_frame, orient = tk.HORIZONTAL, style="TProgressbar", maximum = self.macro_goals[MACROS[i]])
+            stat_attributes[MACROS[i]] = ttk.Progressbar(self.pb_frame, orient = tk.HORIZONTAL, style="TProgressbar", maximum = (self.macro_goals[MACROS[i]] + 0.1))
             stat_attributes[MACROS[i]].grid(column = 0, row = ((i*4) + 1), columnspan = 2, sticky = "NESW")
 
             if self.macro_totals[MACROS[i]] < self.macro_goals[MACROS[i]]:
@@ -231,6 +228,8 @@ class Main:
 
         #open error window function
         self.root.mainloop()
+        with open("acc_data.json", "w") as f:
+            json.dump(self.data, f, indent = 4)
 
     def sign(self):
         self.window_status = True
@@ -290,7 +289,7 @@ class Main:
         self.options.rowconfigure(0, weight = 1)
 
         self.sign_in = tk.Button(self.options, text = "Sign In", bg = "white", height = 1, width = 1, command = self.sign_valid).grid(column = 2, row = 0, sticky = "NESW")
-        self.sign_up = tk.Button(self.options, text = "Sign Up", bg = "white", height = 1, width = 1, command = self.sign_valid).grid(column = 0, row = 0, sticky = "NESW")
+        self.sign_up = tk.Button(self.options, text = "Sign Up", bg = "white", height = 1, width = 1, command = self.sign_up_valid).grid(column = 0, row = 0, sticky = "NESW")
         self.root.bind("<Return>", lambda event : self.sign_valid())
 
         self.u_nam = tk.StringVar()
@@ -306,13 +305,28 @@ class Main:
     
     def sign_valid(self):
         try:
-            if (data[self.u_nam.get()]["password"]) == self.u_pass.get():
+            if (self.data[self.u_nam.get()]["password"]) == self.u_pass.get():
+                    self.acc_name = self.u_nam.get()
                     self.root.unbind("<Return>")
                     self.main_window("Monday", "True")
             else:
                 self.error_txt.set("Key Error:\nplease try again,\nthe username or password you have entered is incorrect")
         except:
             self.error_txt.set("Key Error:\nplease try again,\nthe username or password you have entered is incorrect")
+
+    def sign_up_valid(self):
+        if self.u_nam.get() != "":
+            if self.u_pass.get() != "":
+                self.data[self.u_nam.get()] = dict(self.data["User_0"])
+                self.data[self.u_nam.get()]["password"] = self.u_pass.get()
+                with open("acc_data.json", "w") as f:
+                    json.dump(self.data, f, indent = 4)
+                with open("acc_data.json", "r+") as f:
+                    self.data = json.load(f)
+            else:
+                self.error_txt.set("Key Error:\nplease try again,\nPlease enter a username and password\nin the respective entries")
+        else:
+            self.error_txt.set("Key Error:\nplease try again,\nPlease enter a username and password\nin the respective entries")
 
     def day_btn_set(self, startup, day = ""):
             for i in range(len(self.active_day)):
