@@ -29,7 +29,8 @@
                         "Fat": 0
                     }
                 },
-                "menu": {}
+                "menu": {},
+                "exertion" : {}
             },
             "Tuesday": {
                 "values": {
@@ -58,7 +59,8 @@
                         "Fat": 0
                     }
                 },
-                "menu": {}
+                "menu": {},
+                "exertion" : {}
             },
             "Wednesday": {
                 "values": {
@@ -87,7 +89,8 @@
                         "Fat": 0
                     }
                 },
-                "menu": {}
+                "menu": {},
+                "exertion" : {}
             },
             "Thursday": {
                 "values": {
@@ -116,7 +119,8 @@
                         "Fat": 0
                     }
                 },
-                "menu": {}
+                "menu": {},
+                "exertion" : {}
             },
             "Friday": {
                 "values": {
@@ -145,7 +149,8 @@
                         "Fat": 0
                     }
                 },
-                "menu": {}
+                "menu": {},
+                "exertion" : {}
             },
             "Saturday": {
                 "values": {
@@ -174,7 +179,8 @@
                         "Fat": 0
                     }
                 },
-                "menu": {}
+                "menu": {},
+                "exertion" : {}
             },
             "Sunday": {
                 "values": {
@@ -203,7 +209,8 @@
                         "Fat": 0
                     }
                 },
-                "menu": {}
+                "menu": {},
+                "exertion" : {}
             },
             "week": {
                 "goals": {
